@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5050:5050"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@db:5432/db1
+    networks:
+      - appnet
+
+  db:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_DB: db1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5438:5432"
+    networks:
+      - appnet
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - appnet
+
+volumes:
+  postgres-data:
+
+networks:
+  appnet:
+
