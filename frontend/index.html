@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PostgreSQL Kullanıcı Sistemi</title>
+</head>
+<body>
+    <h2>Kayıt Ol</h2>
+    <input type="text" id="regUser" placeholder="Kullanıcı Adı">
+    <input type="password" id="regPass" placeholder="Şifre">
+    <button onclick="register()">Kayıt</button>
+    <p id="registerResult"></p>
+
+    <h2>Giriş Yap</h2>
+    <input type="text" id="loginUser" placeholder="Kullanıcı Adı">
+    <input type="password" id="loginPass" placeholder="Şifre">
+    <button onclick="login()">Giriş</button>
+    <p id="loginResult"></p>
+
+    <script>
+        function register() {
+            fetch('http://localhost:5050/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('regUser').value,
+                    password: document.getElementById('regPass').value
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('registerResult').innerText = data.message || data.error;
+            });
+        }
+
+        function login() {
+            fetch('http://localhost:5050/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('loginUser').value,
+                    password: document.getElementById('loginPass').value
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loginResult').innerText = data.message || data.error;
+            });
+        }
+    </script>
+</body>
+</html>
